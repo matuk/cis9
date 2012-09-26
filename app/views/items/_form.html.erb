@@ -1,0 +1,30 @@
+<%= simple_form_for([@patient, @item]) do |f| %>
+  <% if @item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @item.itemtype_id? %>
+    <p><%= @item.itemtype.description %></p>
+    <%= f.hidden_field :itemtype_id, :value => @item.itemtype_id.to_s %>
+  <% else %>
+    <%= f.association :itemtype %>
+  <% end  %>
+
+  <%= f.input :description, :input_html => { :class => "span6", :rows => 6 }  %>
+  <%= f.input :occured_at %>
+  <%= f.input :recorded_at %>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                patient_path(@patient), :class => 'btn' %>
+  </div>
+<% end %>
